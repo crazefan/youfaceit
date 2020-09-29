@@ -1,0 +1,14 @@
+{
+  "name": "discordapp",
+  "version": "1.0.0",
+  "description": "discor faceit app",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "crz",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.3.1"
+  }
+}
