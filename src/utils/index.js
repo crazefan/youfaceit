@@ -1,23 +1,14 @@
-import { playerIdList } from "../config.js";
-
-export const getRelevantPlayers = (playerIdList, matchData) => {
+export const getRelevantPlayers = (matchData, playerIdList) => {
   matchData.rounds[0].teams
     .reduce((result, team) => [...result, ...team.players], [])
     .filter((player) => playerIdList.includes(player.player_id));
 };
 
 export const getAllStats = (matchData) => {
-  let scores = matchData.rounds[0].teams.map((team) =>
+  matchData.rounds[0].teams.map((team) =>
     team.players.map((player) => parseInt(player.player_stats.Kills))
   );
-  return scores;
 };
-
-// export const getHighestScoredPlayer = (matchData) => {
-//   getAllStats.map((value, index) => {
-
-//   }
-// }
 
 export const getNickNamesArrays = (matchData) =>
   matchData.rounds[0].teams.map((team) => team.players.map((player) => player.nickname));
@@ -38,9 +29,9 @@ export const getOnlyYourPlayers = (matchData, playerIdList) => {
 };
 
 export const getYourTeamTable = (matchData, playerIdList) => {
-  const ind = getTeamIndex(matchData, playerIdList);
-  var namesColumns = getNickNamesArrays(matchData)[ind];
-  var statsRows = getAllStats(matchData)[ind];
+  const teamIdx = getTeamIndex(matchData, playerIdList);
+  var namesColumns = getNickNamesArrays(matchData)[teamIdx];
+  var statsRows = getAllStats(matchData)[teamIdx];
   var resultArr = [];
   statsRows.map((obj, index) => {
     resultArr.push(namesColumns[index] + " : " + obj);

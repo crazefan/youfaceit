@@ -1,7 +1,7 @@
 {
   "name": "discordapp",
   "version": "1.0.0",
-  "description": "discor faceit app",
+  "description": "discord faceit app",
   "main": "src/main.js",
   "type": "module",
   "scripts": {
