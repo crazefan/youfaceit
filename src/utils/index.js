@@ -1,21 +1,21 @@
 export const getRelevantPlayers = (matchData, playerIdList) => {
-  matchData.rounds[0].teams
+  return matchData.rounds[0].teams
     .reduce((result, team) => [...result, ...team.players], [])
     .filter((player) => playerIdList.includes(player.player_id));
 };
 
 export const getAllStats = (matchData) => {
-  matchData.rounds[0].teams.map((team) =>
+  return matchData.rounds[0].teams.map((team) =>
     team.players.map((player) => parseInt(player.player_stats.Kills))
   );
 };
 
-export const getNickNamesArrays = (matchData) =>
-  matchData.rounds[0].teams.map((team) => team.players.map((player) => player.nickname));
+export const getNickNamesArrays = (matchData) => {
+  return matchData.rounds[0].teams.map((team) => team.players.map((player) => player.nickname));
+};
 
 export const getTeamIndex = (matchData, playerIdList) => {
-  const teamsArray = getNickNamesArrays(matchData);
-  return teamsArray[0].some((nick) => playerIdList.includes(nick)) ? 0 : 1;
+  return getNickNamesArrays(matchData)[0].some((nick) => playerIdList.includes(nick)) ? 0 : 1;
 };
 
 export const hasWon = (matchData, playerIdList) => {
@@ -25,21 +25,28 @@ export const hasWon = (matchData, playerIdList) => {
 };
 
 export const getOnlyYourPlayers = (matchData, playerIdList) => {
-  getNickNamesArrays(matchData)[getTeamIndex(matchData, playerIdList)];
+  return getNickNamesArrays(matchData)[getTeamIndex(matchData, playerIdList)];
 };
 
 export const getYourTeamTable = (matchData, playerIdList) => {
-  const teamIdx = getTeamIndex(matchData, playerIdList);
-  var namesColumns = getNickNamesArrays(matchData)[teamIdx];
-  var statsRows = getAllStats(matchData)[teamIdx];
-  var resultArr = [];
-  statsRows.map((obj, index) => {
-    resultArr.push(namesColumns[index] + " : " + obj);
-  });
-  return resultArr;
+  const teamIndex = getTeamIndex(matchData, playerIdList);
+  const namesColumns = getNickNamesArrays(matchData)[teamIndex];
+  const statsRows = getAllStats(matchData)[teamIndex];
+  return statsRows.map((object, index) => namesColumns[index] + " : " + object);
 };
 
-export const getBestPlayer = (matchData, playerIdList) => {};
+export const getLeastPerformedPlayer = (matchData, playerIdList) =>
+  getRelevantPlayers(gameStatistics, playerIds).reduce((leastPerfomedPlayer, player) =>
+    player.player_stats.Kills < leastPerfomedPlayer.player_stats.Kills
+      ? player
+      : leastPerfomedPlayer
+  );
 
-// game summary including score table and best + worst players
-export const summary = () => {};
+export const getBestPerformedPlayer = (matchData, playerIdList) =>
+  getRelevantPlayers(gameStatistics, playerIds).reduce((leastPerfomedPlayer, player) =>
+    player.player_stats.Kills > leastPerfomedPlayer.player_stats.Kills
+      ? player
+      : leastPerfomedPlayer
+  );
+
+export const getBestPlayer = (matchData, playerIdList) => {};

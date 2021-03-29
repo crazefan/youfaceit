@@ -1,14 +1,10 @@
 import Discord from "discord.js";
 import { discordBotToken, playerIdList } from "./config.js";
-import { fetchMatchData } from "./api/index.js";
+
 import { handleError } from "./utils/handleError.js";
-import {
-  getAllStats,
-  getTeamIndex,
-  hasWon,
-  getYourTeamTable,
-  getRelevantPlayers,
-} from "./utils/index.js";
+import { getYourTeamTable } from "./utils/index.js";
+import { fetchMatchData } from "./api/index.js";
+import { composeMessage } from "./utils/message.js";
 
 const bot = new Discord.Client();
 const prefix = "!";
@@ -27,19 +23,19 @@ bot.on("message", async (message) => {
 
     if (command === "show") {
       const matchData = await fetchMatchData(matchID);
-      await message.channel.send("Your team index is " + getTeamIndex(matchData, playerIdList));
-      await message.channel.send(getRelevantPlayers(matchData, playerIdList));
+      const teamTable = getYourTeamTable(matchData, playerIdList);
+      const embeddedMessage = composeMessage(matchData, teamTable);
+      await message.channel.send({ embed: embeddedMessage });
 
       // await message.channel.send(
       //   hasWon(matchData, playerIdList) ? "Your team won" : "Your team lost"
       // );
 
-      // await message.channel.send(getAllStats(matchData));
+      // await message.channel.send(getYourTeamTable(matchData, playerIdList));
 
-      // message.channel.send(getYourTeamTable(matchData, playerIdList));
+      // await message.channel.send(getRelevantPlayers(matchData, playerIdList));
     }
   } catch (error) {
-    //need to hande error separately in handeError.js
     handleError(error);
   }
 });

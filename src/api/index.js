@@ -9,7 +9,6 @@ export const fetchMatchData = (matchId) => {
       },
     })
     .then(({ data }) => {
-      console.log(data.rounds[0].teams[0]);
       return data;
     })
     .catch((err) => {
