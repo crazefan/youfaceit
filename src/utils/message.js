@@ -1,45 +1,39 @@
 import { playerIdList } from "../config.js";
-import { fetchMatchData } from "../api/index.js";
 import { hasWon } from "../utils/index.js";
 
-const formEmbeddedMessage = (messageBody) => {
+const formEmbeddedMessage = (messageBody, messageThumbnail) => {
   const embeddedMessage = {
     color: 0xde9012,
-    title: "FaceIt Stats",
+    title: "Hello there! FACEIT BOT HERE",
     url: "https://discord.js.org",
-    author: {
-      name: "FaceIt bot",
-      //   icon_url: "https://i.imgur.com/wSTFkRM.png",
-      url: "https://discord.js.org",
-    },
     description: "Your last game stats",
     thumbnail: {
-      //make picture conditional
-      url: "https://i.imgur.com/wSTFkRM.png",
+      url: ` ${messageThumbnail}`,
     },
     fields: [
       {
-        name: "So, players, I have a summary to tell",
-        value: `${messageBody}`,
-      },
-      {
-        name: "\u200b",
-        value: "\u200b",
-        inline: false,
+        name: "GAME SUMMARY",
+        value: `\n${messageBody}`,
       },
     ],
   };
   return embeddedMessage;
 };
 
-export const composeMessage = (matchData, teamTable) => {
+export const composeMessage = (matchData, teamTable, bestPerformedPlayer, leastPerfomedPlayer) => {
   const isVictory = hasWon(matchData, playerIdList)
-    ? "Finally a fucking win"
-    : "Still suck at CS:GO? How's the taste of loss on your lips?";
+    ? "Finally a fucking **WIN**!"
+    : "You **LOST** again. No wonder.";
 
-  const yourTeamTable = [`Your team scores table:`, `${teamTable}`].join("\n");
+  const messageThumbnail = hasWon(matchData, playerIdList)
+    ? "https://i.imgur.com/jSq6lKO.jpg"
+    : "https://i.imgur.com/1RpNBDa.jpg";
 
-  const messageBody = `${isVictory}\n${yourTeamTable}`;
-  console.log(messageBody);
-  return formEmbeddedMessage(messageBody);
+  const yourTeamTable = [`Your team scores table:`, `${teamTable}`].join("\n\n");
+  const bestPerfomer = `Good job, **${bestPerformedPlayer.nickname}**! Keep it up`;
+  const worstPerformer = `Hey, noob **${leastPerfomedPlayer.nickname}**. How about you start making some frags?`;
+
+  const messageBody = `${isVictory}\n\n${yourTeamTable}\n\n${bestPerfomer}\n${worstPerformer}`;
+
+  return formEmbeddedMessage(messageBody, messageThumbnail);
 };

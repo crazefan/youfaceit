@@ -2,13 +2,17 @@ import Discord from "discord.js";
 import { discordBotToken, playerIdList } from "./config.js";
 
 import { handleError } from "./utils/handleError.js";
-import { getYourTeamTable } from "./utils/index.js";
-import { fetchMatchData } from "./api/index.js";
+import {
+  getTeamScoreboard,
+  getBestPerformedPlayer,
+  getLeastPerformedPlayer,
+} from "./utils/index.js";
 import { composeMessage } from "./utils/message.js";
+import { fetchMatchData } from "./api/index.js";
 
 const bot = new Discord.Client();
 const prefix = "!";
-const matchID = "1-6db6cb61-fbce-49a9-b611-2e378d1b8209";
+const matchID = "1-705424b1-ca0c-4161-b4f3-83351d348947";
 
 bot.once("ready", () => {
   console.log("Bot is online");
@@ -23,17 +27,18 @@ bot.on("message", async (message) => {
 
     if (command === "show") {
       const matchData = await fetchMatchData(matchID);
-      const teamTable = getYourTeamTable(matchData, playerIdList);
-      const embeddedMessage = composeMessage(matchData, teamTable);
+      console.log(getBestPerformedPlayer(matchData, playerIdList));
+
+      const teamTable = getTeamScoreboard(matchData, playerIdList);
+      const bestPerformedPlayer = getBestPerformedPlayer(matchData, playerIdList);
+      const leastPerformedPlayer = getLeastPerformedPlayer(matchData, playerIdList);
+      const embeddedMessage = composeMessage(
+        matchData,
+        teamTable,
+        bestPerformedPlayer,
+        leastPerformedPlayer
+      );
       await message.channel.send({ embed: embeddedMessage });
-
-      // await message.channel.send(
-      //   hasWon(matchData, playerIdList) ? "Your team won" : "Your team lost"
-      // );
-
-      // await message.channel.send(getYourTeamTable(matchData, playerIdList));
-
-      // await message.channel.send(getRelevantPlayers(matchData, playerIdList));
     }
   } catch (error) {
     handleError(error);
