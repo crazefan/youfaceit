@@ -4,8 +4,7 @@ import { hasWon } from "../utils/index.js";
 const formEmbeddedMessage = (messageBody, messageThumbnail) => {
   const embeddedMessage = {
     color: 0xde9012,
-    title: "Hello there! FACEIT BOT HERE",
-    url: "https://discord.js.org",
+    title: "FACEIT LOSER BOT MESSAGE",
     description: "Your last game stats",
     thumbnail: {
       url: ` ${messageThumbnail}`,
@@ -30,10 +29,16 @@ export const composeMessage = (matchData, teamTable, bestPerformedPlayer, leastP
     : "https://i.imgur.com/1RpNBDa.jpg";
 
   const yourTeamTable = [`Your team scores table:`, `${teamTable}`].join("\n\n");
+  const mapInfo = [
+    `Map: ${matchData.rounds[0].round_stats.Map}`,
+    `Счет: ${matchData.rounds[0].round_stats.Score}`,
+  ];
   const bestPerfomer = `Good job, **${bestPerformedPlayer.nickname}**! Keep it up`;
   const worstPerformer = `Hey, noob **${leastPerfomedPlayer.nickname}**. How about you start making some frags?`;
 
-  const messageBody = `${isVictory}\n\n${yourTeamTable}\n\n${bestPerfomer}\n${worstPerformer}`;
+  const messageBody = `${isVictory}\n\n${yourTeamTable}\n\n${mapInfo.join(
+    "\n"
+  )}\n\n${bestPerfomer}\n${worstPerformer}`;
 
   return formEmbeddedMessage(messageBody, messageThumbnail);
 };

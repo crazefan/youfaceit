@@ -7,12 +7,13 @@ import {
   getBestPerformedPlayer,
   getLeastPerformedPlayer,
 } from "./utils/index.js";
+
 import { composeMessage } from "./utils/message.js";
 import { fetchMatchData } from "./api/index.js";
 
 const bot = new Discord.Client();
 const prefix = "!";
-const matchID = "1-705424b1-ca0c-4161-b4f3-83351d348947";
+const matchID = "1-9de1b5f2-bd53-46ad-9505-28e690e35329";
 
 bot.once("ready", () => {
   console.log("Bot is online");
