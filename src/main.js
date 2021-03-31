@@ -10,7 +10,7 @@ import {
 
 import { composeMessage } from "./utils/message.js";
 import { fetchMatchData } from "./api/index.js";
-import { addUser, removeUser, showAddedUsers } from "./utils/db.js";
+import { addUser, removeUser, showAddedUsers, duplicateCheck } from "./utils/db.js";
 
 const bot = new Discord.Client();
 const prefix = "!";
@@ -58,6 +58,7 @@ bot.on("message", async (message) => {
         await message.channel.send("You cannot delete multiple users or add an empty user.");
       }
     } else if (command === "list") {
+      console.log(duplicateCheck());
       await message.channel.send(`List of added users: ${showAddedUsers().join(", ")}`);
     }
   } catch (error) {
