@@ -44,8 +44,12 @@ bot.on("message", async (message) => {
     } else if (command === "add") {
       if (args.length === 1) {
         const [nickname] = args;
-        addUser(nickname);
-        await message.channel.send(`User ${nickname} added successfully`);
+        if (duplicateCheck(nickname)) {
+          await message.channel.send(`User ${nickname} is already added to the players list`);
+        } else {
+          addUser(nickname);
+          await message.channel.send(`User ${nickname} added successfully`);
+        }
       } else {
         await message.channel.send("You cannot add multiple users or add an empty user.");
       }
@@ -58,7 +62,6 @@ bot.on("message", async (message) => {
         await message.channel.send("You cannot delete multiple users or add an empty user.");
       }
     } else if (command === "list") {
-      console.log(duplicateCheck());
       await message.channel.send(`List of added users: ${showAddedUsers().join(", ")}`);
     }
   } catch (error) {
