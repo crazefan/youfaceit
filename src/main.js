@@ -10,6 +10,7 @@ import {
 
 import { composeMessage } from "./utils/message.js";
 import { fetchMatchData } from "./api/index.js";
+import { addUser, removeUser, showAddedUsers } from "./utils/db.js";
 
 const bot = new Discord.Client();
 const prefix = "!";
@@ -40,11 +41,28 @@ bot.on("message", async (message) => {
         leastPerformedPlayer
       );
       await message.channel.send({ embed: embeddedMessage });
+    } else if (command === "add") {
+      if (args.length === 1) {
+        const [nickname] = args;
+        addUser(nickname);
+        await message.channel.send(`User ${nickname} added successfully`);
+      } else {
+        await message.channel.send("You cannot add multiple users or add an empty user.");
+      }
+    } else if (command === "remove") {
+      if (args.length === 1) {
+        const [nickname] = args;
+        removeUser(nickname);
+        await message.channel.send(`User ${nickname} removed successfully`);
+      } else {
+        await message.channel.send("You cannot delete multiple users or add an empty user.");
+      }
+    } else if (command === "list") {
+      await message.channel.send(`List of added users: ${showAddedUsers().join(", ")}`);
     }
   } catch (error) {
     handleError(error);
   }
 });
 
-//should be last in the file
 bot.login(discordBotToken);

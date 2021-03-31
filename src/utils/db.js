@@ -1,21 +1,21 @@
 import lowdb from "lowdb";
-import FileSync from "lowdb/adapters/FileSync";
+import FileSync from "lowdb/adapters/FileSync.js";
 
 const adapter = new FileSync("db.json");
 const db = lowdb(adapter);
 
 const defaultDb = { nicknames: [], history: [] };
 
-db.defaults(defaultDb);
+db.defaults(defaultDb).write();
 
 export const addUser = (nickname) => {
   db.get("nicknames").push(nickname).write();
 };
 
 export const removeUser = (nickname) => {
-  db.get("nicknames").remove(nickname).write();
+  db.get("nicknames").pull(nickname).write();
 };
 
 export const showAddedUsers = () => {
-  db.get("nicknames").value();
+  return db.get("nicknames").value();
 };
