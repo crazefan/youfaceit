@@ -1,25 +1,40 @@
-import { playerIdList } from "../config.js";
 import { hasWon } from "../utils/index.js";
 
-const formEmbeddedMessage = (messageBody, messageThumbnail) => {
+const formEmbeddedMessage = (messageData, messageThumbnail) => {
   const embeddedMessage = {
     color: 0xde9012,
-    title: "FACEIT LOSER BOT MESSAGE",
-    description: "Your last game stats",
+    title: "YourFaceIt",
     thumbnail: {
       url: ` ${messageThumbnail}`,
     },
     fields: [
       {
         name: "GAME SUMMARY",
-        value: `\n${messageBody}`,
+        value: `\n\n${messageData.body}`,
+      },
+
+      {
+        name: "Map info",
+        value: `${messageData.mapData}`,
+        inline: true,
+      },
+      {
+        name: "Scoreboard",
+        value: `${messageData.scoreboard}`,
+        inline: true,
       },
     ],
   };
   return embeddedMessage;
 };
 
-export const composeMessage = (matchData, teamTable, bestPerformedPlayer, leastPerfomedPlayer) => {
+export const composeMessage = (
+  matchData,
+  teamTable,
+  bestPerformedPlayer,
+  leastPerfomedPlayer,
+  playerIdList
+) => {
   const isVictory = hasWon(matchData, playerIdList)
     ? "Finally a fucking **WIN**!"
     : "You **LOST** again. No wonder.";
@@ -28,17 +43,19 @@ export const composeMessage = (matchData, teamTable, bestPerformedPlayer, leastP
     ? "https://i.imgur.com/jSq6lKO.jpg"
     : "https://i.imgur.com/1RpNBDa.jpg";
 
-  const yourTeamTable = [`Your team scores table:`, `${teamTable}`].join("\n\n");
-  const mapInfo = [
-    `Map: ${matchData.rounds[0].round_stats.Map}`,
-    `Счет: ${matchData.rounds[0].round_stats.Score}`,
-  ];
   const bestPerfomer = `Good job, **${bestPerformedPlayer.nickname}**! Keep it up`;
   const worstPerformer = `Hey, noob **${leastPerfomedPlayer.nickname}**. How about you start making some frags?`;
 
-  const messageBody = `${isVictory}\n\n${yourTeamTable}\n\n${mapInfo.join(
-    "\n"
-  )}\n\n${bestPerfomer}\n${worstPerformer}`;
+  const mapInfo = [
+    `Map: ${matchData.rounds[0].round_stats.Map}`,
+    `Score: ${matchData.rounds[0].round_stats.Score}`,
+  ];
 
-  return formEmbeddedMessage(messageBody, messageThumbnail);
+  const messageData = {
+    body: `${isVictory}\n\n${bestPerfomer}\n${worstPerformer}`,
+    mapData: `${mapInfo.join("\n")}`,
+    scoreboard: `${teamTable}`,
+  };
+
+  return formEmbeddedMessage(messageData, messageThumbnail);
 };

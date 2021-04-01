@@ -1,3 +1,30 @@
+export const getLatestCommonGame = (histories) => {
+  const latestGames = histories.map((history) => history.items[0] || null);
+
+  const gamesMap = latestGames.reduce(
+    (result, game) =>
+      game
+        ? {
+            ...result,
+            [game.match_id]: result[game.match_id] ? result[game.match_id] + 1 : 1,
+          }
+        : result,
+    {}
+  );
+
+  const gameId = Object.keys(gamesMap).reduce((result, matchId) =>
+    gamesMap[matchId] > gamesMap[result] ? matchId : result
+  );
+
+  const latestGame = latestGames.find((game) => game.match_id === gameId);
+
+  return latestGame &&
+    gamesMap[gameId] >= minPlayersToCountGame &&
+    isWithinLastFiveMinutes(latestGame.finished_at)
+    ? latestGame
+    : null;
+};
+
 export const getRelevantPlayers = (matchData, playerIdList) => {
   return matchData.rounds[0].teams
     .reduce((result, team) => [...result, ...team.players], [])

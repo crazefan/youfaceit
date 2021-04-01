@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { discordBotToken, playerIdList } from "./config.js";
+import { discordBotToken } from "./config.js";
 
 import { handleError } from "./utils/handleError.js";
 import {
@@ -10,7 +10,7 @@ import {
 
 import { composeMessage } from "./utils/message.js";
 import { fetchMatchData } from "./api/index.js";
-import { addUser, removeUser, showAddedUsers, duplicateCheck } from "./utils/db.js";
+import { addUser, removeUser, getAddedUsers, duplicateCheck } from "./utils/db.js";
 
 const bot = new Discord.Client();
 const prefix = "!";
@@ -28,9 +28,8 @@ bot.on("message", async (message) => {
     const command = args.shift().toLowerCase();
 
     if (command === "show") {
+      const playerIdList = getAddedUsers();
       const matchData = await fetchMatchData(matchID);
-      console.log(getBestPerformedPlayer(matchData, playerIdList));
-
       const teamTable = getTeamScoreboard(matchData, playerIdList);
       const bestPerformedPlayer = getBestPerformedPlayer(matchData, playerIdList);
       const leastPerformedPlayer = getLeastPerformedPlayer(matchData, playerIdList);
@@ -38,7 +37,8 @@ bot.on("message", async (message) => {
         matchData,
         teamTable,
         bestPerformedPlayer,
-        leastPerformedPlayer
+        leastPerformedPlayer,
+        playerIdList
       );
       await message.channel.send({ embed: embeddedMessage });
     } else if (command === "add") {
@@ -62,7 +62,7 @@ bot.on("message", async (message) => {
         await message.channel.send("You cannot delete multiple users or add an empty user.");
       }
     } else if (command === "list") {
-      await message.channel.send(`List of added users: ${showAddedUsers().join(", ")}`);
+      await message.channel.send(`List of added users: ${getAddedUsers().join(", ")}`);
     }
   } catch (error) {
     handleError(error);

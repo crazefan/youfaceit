@@ -18,7 +18,7 @@ export const removeUser = (nickname) => {
   db.get("nicknames").pull(nickname).write();
 };
 
-export const showAddedUsers = () => {
+export const getAddedUsers = () => {
   return db.get("nicknames").value();
 };
 
