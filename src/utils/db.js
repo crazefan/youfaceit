@@ -21,3 +21,11 @@ export const removeUser = (nickname) => {
 export const showAddedUsers = () => {
   return db.get("nicknames").value();
 };
+
+export const saveGame = (gameId) => {
+  db.get("history").push({ id: gameId }).write();
+};
+
+export const getGame = (gameId) => {
+  return db.get("history").find({ id: gameId }).value();
+};
