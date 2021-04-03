@@ -3,13 +3,17 @@ import { hasWon } from "../utils/index.js";
 const formEmbeddedMessage = (messageData, messageThumbnail) => {
   const embeddedMessage = {
     color: 0xde9012,
-    title: "YourFaceIt",
+    author: {
+      name: "YouFaceIt",
+      icon_url: "https://i.imgur.com/Kovfkbl.png",
+      url: "https://github.com/crazefan/faceitloser",
+    },
     thumbnail: {
       url: ` ${messageThumbnail}`,
     },
     fields: [
       {
-        name: "GAME SUMMARY",
+        name: `\n\nGame summary`,
         value: `\n\n${messageData.body}`,
       },
 
@@ -36,14 +40,14 @@ export const composeMessage = (
   playerIdList
 ) => {
   const isVictory = hasWon(matchData, playerIdList)
-    ? "Finally a fucking **WIN**!"
+    ? "Finally a fucking **WIN**! Good job, team"
     : "You **LOST** again. No wonder.";
 
   const messageThumbnail = hasWon(matchData, playerIdList)
     ? "https://i.imgur.com/jSq6lKO.jpg"
     : "https://i.imgur.com/1RpNBDa.jpg";
 
-  const bestPerfomer = `Good job, **${bestPerformedPlayer.nickname}**! Keep it up`;
+  const bestPerfomer = `Best player - **${bestPerformedPlayer.nickname}**! Keep it this way`;
   const worstPerformer = `Hey, noob **${leastPerfomedPlayer.nickname}**. How about you start making some frags?`;
 
   const mapInfo = [

@@ -17,6 +17,22 @@ export const fetchMatchData = (matchId) => {
     });
 };
 
+export const fetchPlayerData = (nickname) => {
+  return axios
+    .get(`https://open.faceit.com/data/v4/players?nickname=${nickname}`, {
+      headers: {
+        Authorization: "Bearer " + faceitApiKey,
+      },
+    })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch((err) => {
+      console.error(err);
+      Promise.reject(err);
+    });
+};
+
 // const faceitApi = axios.create({
 //   headers: {
 //     Authorization: "Bearer " + faceitApiKey,

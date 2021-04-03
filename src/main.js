@@ -10,6 +10,7 @@ import {
 
 import { composeMessage } from "./utils/message.js";
 import { fetchMatchData } from "./api/index.js";
+import { fetchPlayerData } from "./api/index.js";
 import { addUser, removeUser, getAddedUsers, duplicateCheck } from "./utils/db.js";
 
 const bot = new Discord.Client();

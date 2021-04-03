@@ -8,7 +8,7 @@ const defaultDb = { nicknames: [], history: [] };
 
 db.defaults(defaultDb).write();
 
-export const duplicateCheck = (nickname) => db.get("nicknames").includes(nickname).value(); //always returns undefined ??
+export const duplicateCheck = (nickname) => db.get("nicknames").includes(nickname).value();
 
 export const addUser = (nickname) => {
   db.get("nicknames").push(nickname).write();
