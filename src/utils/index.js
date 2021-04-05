@@ -1,3 +1,11 @@
+import { fetchPlayerData } from "../api/index.js";
+
+export const getPlayerIdFromNickname = async (nickname) => {
+  console.log(fetchPlayerData(nickname));
+  const playerData = await fetchPlayerData(nickname);
+  return playerData.player_id;
+};
+
 export const getLatestCommonGame = (histories) => {
   const latestGames = histories.map((history) => history.items[0] || null);
 
