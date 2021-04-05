@@ -29,18 +29,19 @@ bot.on("message", async (message) => {
     const command = args.shift().toLowerCase();
 
     if (command === "show") {
-      const playerIdList = getAddedUsers();
+      const playersNicknamesList = getAddedUsers();
       const matchData = await fetchMatchData(matchID);
-      const teamTable = getTeamScoreboard(matchData, playerIdList);
-      const bestPerformedPlayer = getBestPerformedPlayer(matchData, playerIdList);
-      const leastPerformedPlayer = getLeastPerformedPlayer(matchData, playerIdList);
+      const teamTable = getTeamScoreboard(matchData, playersNicknamesList);
+      const bestPerformedPlayer = getBestPerformedPlayer(matchData, playersNicknamesList);
+      const leastPerformedPlayer = getLeastPerformedPlayer(matchData, playersNicknamesList);
       const embeddedMessage = composeMessage(
         matchData,
         teamTable,
         bestPerformedPlayer,
         leastPerformedPlayer,
-        playerIdList
+        playersNicknamesList
       );
+
       await message.channel.send({ embed: embeddedMessage });
     } else if (command === "add") {
       if (args.length === 1) {
@@ -49,7 +50,6 @@ bot.on("message", async (message) => {
           await message.channel.send(`User ${nickname} is already added to the players list`);
         } else {
           const playerId = await getPlayerIdFromNickname(nickname);
-          console.log(playerId);
           addUser(nickname, playerId);
           await message.channel.send(`User ${nickname} added successfully`);
         }
@@ -65,7 +65,10 @@ bot.on("message", async (message) => {
         await message.channel.send("You cannot delete multiple users or add an empty user.");
       }
     } else if (command === "list") {
-      await message.channel.send(`List of added users: ${getAddedUsers().join(", ")}`);
+      const addedPlayersList = getAddedUsers()
+        .map((player) => player.nickname)
+        .join(", "); // I might move this somewhere
+      await message.channel.send(`List of added users: ${addedPlayersList}`);
     }
   } catch (error) {
     handleError(error);
