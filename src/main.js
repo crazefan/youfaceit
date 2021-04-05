@@ -6,11 +6,11 @@ import {
   getTeamScoreboard,
   getBestPerformedPlayer,
   getLeastPerformedPlayer,
+  getPlayerIdFromNickname,
 } from "./utils/index.js";
 
 import { composeMessage } from "./utils/message.js";
 import { fetchMatchData } from "./api/index.js";
-import { fetchPlayerData } from "./api/index.js";
 import { addUser, removeUser, getAddedUsers, duplicateCheck } from "./utils/db.js";
 
 const bot = new Discord.Client();
@@ -48,7 +48,9 @@ bot.on("message", async (message) => {
         if (duplicateCheck(nickname)) {
           await message.channel.send(`User ${nickname} is already added to the players list`);
         } else {
-          addUser(nickname);
+          const playerId = await getPlayerIdFromNickname(nickname);
+          console.log(playerId);
+          addUser(nickname, playerId);
           await message.channel.send(`User ${nickname} added successfully`);
         }
       } else {
