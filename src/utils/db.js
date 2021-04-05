@@ -8,7 +8,11 @@ const defaultDb = { nicknames: [], history: [] };
 
 db.defaults(defaultDb).write();
 
-export const duplicateCheck = (nickname) => db.get("nicknames").find(nickname).value();
+export const duplicateCheck = (nickname) =>
+  db
+    .get("nicknames")
+    .find({ nickname: `${nickname}` })
+    .value();
 
 export const addUser = (nickname, userId) => {
   db.get("nicknames")
@@ -17,7 +21,9 @@ export const addUser = (nickname, userId) => {
 };
 
 export const removeUser = (nickname) => {
-  db.get("nicknames").pull(nickname).write();
+  db.get("nicknames")
+    .remove({ nickname: `${nickname}` })
+    .write();
 };
 
 export const getAddedUsers = () => {
