@@ -1,36 +1,33 @@
-import { hasWon } from "../utils/index.js";
+import { hasWon } from "./faceit.js";
 
-const formEmbeddedMessage = (messageData, messageThumbnail) => {
-  const embeddedMessage = {
-    color: 0xde9012,
-    author: {
-      name: "YouFaceIt",
-      icon_url: "https://i.imgur.com/Kovfkbl.png",
-      url: "https://github.com/crazefan/faceitloser",
+const formEmbeddedMessage = (messageData, messageThumbnail) => ({
+  color: 0xde9012,
+  author: {
+    name: "YouFaceIt",
+    icon_url: "https://i.imgur.com/Kovfkbl.png",
+    url: "https://github.com/crazefan/faceitloser",
+  },
+  thumbnail: {
+    url: ` ${messageThumbnail}`,
+  },
+  fields: [
+    {
+      name: `\n\nGame summary`,
+      value: `\n\n${messageData.body}`,
     },
-    thumbnail: {
-      url: ` ${messageThumbnail}`,
-    },
-    fields: [
-      {
-        name: `\n\nGame summary`,
-        value: `\n\n${messageData.body}`,
-      },
 
-      {
-        name: "Map info",
-        value: `${messageData.mapData}`,
-        inline: true,
-      },
-      {
-        name: "Scoreboard",
-        value: `${messageData.scoreboard}`,
-        inline: true,
-      },
-    ],
-  };
-  return embeddedMessage;
-};
+    {
+      name: "Map info",
+      value: `${messageData.mapData}`,
+      inline: true,
+    },
+    {
+      name: "Scoreboard",
+      value: `${messageData.scoreboard}`,
+      inline: true,
+    },
+  ],
+});
 
 export const composeMessage = (
   matchData,
@@ -40,14 +37,14 @@ export const composeMessage = (
   playerIdList
 ) => {
   const isVictory = hasWon(matchData, playerIdList)
-    ? "Finally a fucking **WIN**! Good job, team"
+    ? "Finally a fucking **WIN**! Good job, team."
     : "You **LOST** again. No wonder.";
 
   const messageThumbnail = hasWon(matchData, playerIdList)
     ? "https://i.imgur.com/jSq6lKO.jpg"
     : "https://i.imgur.com/1RpNBDa.jpg";
 
-  const bestPerfomer = `Best player - **${bestPerformedPlayer.nickname}**! Keep it this way`;
+  const bestPerfomer = `Best player - **${bestPerformedPlayer.nickname}**! Way to go!`;
   const worstPerformer = `Hey, noob **${leastPerfomedPlayer.nickname}**. How about you start making some frags?`;
 
   const mapInfo = [
