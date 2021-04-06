@@ -1,5 +1,5 @@
 {
-  "name": "YouFaceIt",
+  "name": "youfaceit",
   "version": "0.1.0",
   "description": "Discord bot for FaceIt stats",
   "main": "src/main.js",
