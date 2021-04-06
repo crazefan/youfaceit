@@ -7,15 +7,17 @@ import {
   getBestPerformedPlayer,
   getLeastPerformedPlayer,
   getPlayerIdFromNickname,
-} from "./utils/index.js";
+  getAddedUsersNicknames,
+  getAddedUsersIds,
+  getLatestCommonGame,
+} from "./utils/faceit.js";
 
 import { composeMessage } from "./utils/message.js";
-import { fetchMatchData } from "./api/index.js";
+import { fetchMatchData, fetchPlayerHistory } from "./api/index.js";
 import { addUser, removeUser, getAddedUsers, duplicateCheck } from "./utils/db.js";
 
 const bot = new Discord.Client();
 const prefix = "!";
-const matchID = "1-9de1b5f2-bd53-46ad-9505-28e690e35329";
 
 bot.once("ready", () => {
   console.log("Bot is online");
@@ -29,11 +31,17 @@ bot.on("message", async (message) => {
     const command = args.shift().toLowerCase();
 
     if (command === "show") {
-      const playersNicknamesList = getAddedUsers();
-      const matchData = await fetchMatchData(matchID);
+      const playersIdList = getAddedUsersIds();
+      const asyncRequests = playersIdList.map(fetchPlayerHistory);
+      const histories = await Promise.all(asyncRequests);
+
+      const match = getLatestCommonGame(histories);
+      const matchData = await fetchMatchData(match.match_id);
+      const playersNicknamesList = getAddedUsersNicknames();
       const teamTable = getTeamScoreboard(matchData, playersNicknamesList);
       const bestPerformedPlayer = getBestPerformedPlayer(matchData, playersNicknamesList);
       const leastPerformedPlayer = getLeastPerformedPlayer(matchData, playersNicknamesList);
+
       const embeddedMessage = composeMessage(
         matchData,
         teamTable,
@@ -50,8 +58,12 @@ bot.on("message", async (message) => {
           await message.channel.send(`User ${nickname} is already added to the players list`);
         } else {
           const playerId = await getPlayerIdFromNickname(nickname);
-          addUser(nickname, playerId);
-          await message.channel.send(`User ${nickname} added successfully`);
+          if (!playerId) {
+            await message.channel.send(`User ${nickname} was not found, try again.`);
+          } else {
+            addUser(nickname, playerId);
+            await message.channel.send(`User ${nickname} added successfully`);
+          }
         }
       } else {
         await message.channel.send("You cannot add multiple users or add an empty user.");

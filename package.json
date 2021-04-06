@@ -1,7 +1,7 @@
 {
-  "name": "discordapp",
-  "version": "1.0.0",
-  "description": "discord faceit app",
+  "name": "YouFaceIt",
+  "version": "0.1.0",
+  "description": "Discord bot for FaceIt stats",
   "main": "src/main.js",
   "type": "module",
   "scripts": {
@@ -15,10 +15,7 @@
     "babel-cli": "^6.26.0",
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
-    "lowdb": "^1.0.0",
-    "node-fetch": "^2.6.1",
-    "sequelize": "^6.3.5",
-    "sqlite3": "^5.0.0"
+    "lowdb": "^1.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
