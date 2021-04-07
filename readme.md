@@ -19,10 +19,10 @@ _The bot is in continuous development and is planned to be a public bot with eas
 
 When your bot is up and running and is on your server, you can use these commands:
 
-`!add [FaceIt nickname]` - to add a player to a watch list
-`!remove [FaceIt nickname]` - to remove a player from the list
-`!list` - show the watch list of added players
-`!game` - detect latest common game of 2 and more players in the list and show info about the match
+- `!add [FaceIt nickname]` - to add a player to a watch list
+- `!remove [FaceIt nickname]` - to remove a player from the list
+- `!list` - show the watch list of added players
+- `!game` - detect latest common game of 2 and more players in the list and show info about the match
 
 ### Testing and development 👨‍💻
 
