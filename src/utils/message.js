@@ -23,7 +23,7 @@ const formEmbeddedMessage = (messageData, messageThumbnail) => ({
     },
     {
       name: "Scoreboard",
-      value: `${messageData.scoreboard}`,
+      value: `\`${messageData.scoreboard}\``,
       inline: true,
     },
   ],
