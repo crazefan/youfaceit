@@ -19,13 +19,13 @@ export const commandActions = (message, args) => {
     {
       command: "show",
       action: async () => {
-        const playersIdList = getAddedUsersIds();
+        const playersIdList = await getAddedUsersIds();
         const asyncRequests = playersIdList.map(fetchPlayerHistory);
         const histories = await Promise.all(asyncRequests);
 
         const match = getLatestCommonGame(histories);
         const matchData = await fetchMatchData(match.match_id);
-        const playersNicknamesList = getAddedUsersNicknames();
+        const playersNicknamesList = await getAddedUsersNicknames();
         const teamScoreboard = getTeamScoreboard(matchData, playersNicknamesList);
         const bestPerformedPlayer = getBestPerformedPlayer(matchData, playersNicknamesList);
         const leastPerformedPlayer = getLeastPerformedPlayer(matchData, playersNicknamesList);
@@ -49,7 +49,7 @@ export const commandActions = (message, args) => {
           return;
         }
 
-        if (duplicateCheck(nickname)) {
+        if (await duplicateCheck(nickname)) {
           await message.channel.send(`User ${nickname} is already added to the players list`);
           return;
         }
@@ -79,8 +79,8 @@ export const commandActions = (message, args) => {
     {
       command: "list",
       action: async () => {
-        const addedPlayersList = getAddedUsersNicknames().join(", ");
-        await message.channel.send(`List of added users: ${addedPlayersList}`);
+        const addedPlayersList = await getAddedUsersNicknames();
+        await message.channel.send(`List of added users: ${addedPlayersList.join(", ")}`);
       },
     },
   ];
