@@ -2,12 +2,14 @@ import { mongoDbUri } from "../config.js";
 
 import mongoose from "mongoose";
 
-await mongoose.connect(mongoDbUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-});
+await mongoose
+  .connect(mongoDbUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  })
+  .catch((error) => console.log(error));
 
 const { Schema } = mongoose;
 
