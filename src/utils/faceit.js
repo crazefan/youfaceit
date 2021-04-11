@@ -10,12 +10,14 @@ export const getPlayerIdFromNickname = async (nickname) => {
   }
 };
 
-export const getAddedUsersNicknames = () => {
-  return getAddedUsers().map((player) => player.nickname);
+export const getAddedUsersNicknames = async () => {
+  const list = await getAddedUsers();
+  return list.map((player) => player.nickname);
 };
 
-export const getAddedUsersIds = () => {
-  return getAddedUsers().map((player) => player.userId);
+export const getAddedUsersIds = async () => {
+  const list = await getAddedUsers();
+  return list.map((player) => player.userId);
 };
 
 export const getLatestCommonGame = (histories) => {

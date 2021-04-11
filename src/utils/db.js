@@ -1,39 +1,41 @@
-import lowdb from "lowdb";
-import FileSync from "lowdb/adapters/FileSync.js";
+import { mongoDbUri } from "../config.js";
 
-const adapter = new FileSync("db.json");
-const db = lowdb(adapter);
+import mongoose from "mongoose";
 
-const defaultDb = { nicknames: [], history: [] };
+await mongoose
+  .connect(mongoDbUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  })
+  .catch((error) => console.log(error));
 
-db.defaults(defaultDb).write();
+const { Schema } = mongoose;
 
-export const duplicateCheck = (nickname) =>
-  db
-    .get("nicknames")
-    .find({ nickname: `${nickname}` })
-    .value();
+const PlayerSchema = new Schema({
+  nickname: String,
+  userId: String,
+});
 
-export const addUser = (nickname, userId) => {
-  db.get("nicknames")
-    .push({ nickname: `${nickname}`, userId: `${userId}` })
-    .write();
+const Player = mongoose.model("Player", PlayerSchema);
+
+export const duplicateCheck = async (nickname) => {
+  return await Player.exists({ nickname: `${nickname}` });
 };
 
-export const removeUser = (nickname) => {
-  db.get("nicknames")
-    .remove({ nickname: `${nickname}` })
-    .write();
+export const getAddedUsers = async () => {
+  return await Player.find({});
 };
 
-export const getAddedUsers = () => {
-  return db.get("nicknames").value();
+export const addUser = async (nickname, userId) => {
+  const player = new Player({
+    nickname: `${nickname}`,
+    userId: `${userId}`,
+  });
+  await player.save();
 };
 
-export const saveGame = (gameId) => {
-  db.get("history").push({ id: gameId }).write();
-};
-
-export const getGame = (gameId) => {
-  return db.get("history").find({ id: gameId }).value();
+export const removeUser = async (nickname) => {
+  await Player.deleteOne({ nickname: `${nickname}` });
 };
