@@ -64,13 +64,17 @@ export const hasWon = (matchData, playerIdList) => {
 };
 
 export const sortPlayersByKills = (player1, player2) => {
-  if (player1.kills > player2.kills) {
+  if (compareInts(player1.kills, player2.kills)) {
     return -1;
   }
-  if (player1.kills < player2.kills) {
+  if (!compareInts(player1.kills, player2.kills)) {
     return 1;
   }
   return 0;
+};
+
+export const compareInts = (object1, object2) => {
+  return parseInt(object1) > parseInt(object2) ? true : false;
 };
 
 export const getTeamScoreboard = (matchData, playerIdList) => {
@@ -86,14 +90,14 @@ export const getTeamScoreboard = (matchData, playerIdList) => {
 
 export const getLeastPerformedPlayer = (matchData, playerIdList) =>
   getRelevantPlayers(matchData, playerIdList).reduce((leastPerfomedPlayer, player) =>
-    player.player_stats.Kills < leastPerfomedPlayer.player_stats.Kills
+    !compareInts(player.player_stats.Kills, leastPerfomedPlayer.player_stats.Kills)
       ? player
       : leastPerfomedPlayer
   );
 
 export const getBestPerformedPlayer = (matchData, playerIdList) =>
   (getRelevantPlayers(matchData, playerIdList) || []).reduce((leastPerfomedPlayer, player) =>
-    player.player_stats.Kills > leastPerfomedPlayer.player_stats.Kills
+    compareInts(player.player_stats.Kills, leastPerfomedPlayer.player_stats.Kills)
       ? player
       : leastPerfomedPlayer
   );
