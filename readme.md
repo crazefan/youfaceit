@@ -7,11 +7,14 @@ _The idea was born on our Discord server, our team needed a way to automate the 
 
 ### Prerequisites
 
-To use it on your discord server you need to have:
+To use it on your Discord server you need to have:
 
 - a valid [FaceIt API](https://developers.faceit.com/) key
 - Discord bot token from an [Discord developer portal](https://discord.com/developers/applications)
-- a way to deploy your server (I personally use [AWS EC2](https://aws.amazon.com/ec2/))
+- a way to deploy your server (I personally use [Heroku](https://heroku.com/))
+- [MongoDB](https://www.mongodb.com/) connection string for storing and managing your team info\*
+
+\*_Dont forget to whitelist your server ip in MongoDB Atlas connection settings_
 
 _The bot is in continuous development and is planned to be a public bot with easy access through adding to the server._
 
@@ -22,7 +25,7 @@ When your bot is up and running and is on your server, you can use these command
 - `!add [FaceIt nickname]` - to add a player to a watch list
 - `!remove [FaceIt nickname]` - to remove a player from the list
 - `!list` - show the watch list of added players
-- `!game` - detect latest common game of 2 and more players in the list and show info about the match
+- `!show` - detect latest common game of 2 and more players in the list and show info about the match
 
 ### Testing and development 👨‍💻
 
