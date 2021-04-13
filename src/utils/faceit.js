@@ -1,5 +1,4 @@
 import { fetchPlayerData } from "../api/index.js";
-import { getAddedUsers } from "./db.js";
 
 export const getPlayerIdFromNickname = async (nickname) => {
   try {
@@ -8,16 +7,6 @@ export const getPlayerIdFromNickname = async (nickname) => {
   } catch (err) {
     return null;
   }
-};
-
-export const getAddedUsersNicknames = async () => {
-  const list = await getAddedUsers();
-  return list.map((player) => player.nickname);
-};
-
-export const getAddedUsersIds = async () => {
-  const list = await getAddedUsers();
-  return list.map((player) => player.userId);
 };
 
 export const getLatestCommonGame = (histories) => {
