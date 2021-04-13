@@ -73,10 +73,6 @@ export const sortPlayersByKills = (player1, player2) => {
   return 0;
 };
 
-export const compareInts = (object1, object2) => {
-  return parseInt(object1) > parseInt(object2) ? true : false;
-};
-
 export const getTeamScoreboard = (matchData, playerIdList) => {
   return matchData.rounds[0].teams[getTeamIndex(matchData, playerIdList)].players
     .map(({ nickname, player_stats }) => ({
@@ -101,3 +97,7 @@ export const getBestPerformedPlayer = (matchData, playerIdList) =>
       ? player
       : leastPerfomedPlayer
   );
+
+const compareInts = (object1, object2) => {
+  return parseInt(object1) > parseInt(object2) ? true : false;
+};
