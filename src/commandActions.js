@@ -3,29 +3,35 @@ import {
   getBestPerformedPlayer,
   getLeastPerformedPlayer,
   getPlayerIdFromNickname,
-  getAddedUsersNicknames,
-  getAddedUsersIds,
   getLatestCommonGame,
 } from "./utils/faceit.js";
 
 import { composeMessage } from "./utils/message.js";
 import { fetchMatchData, fetchPlayerHistory } from "./api/index.js";
-import { addUser, removeUser, duplicateCheck } from "./utils/db.js";
+
+import {
+  addUser,
+  removeUser,
+  duplicateCheck,
+  getAddedUsersNicknames,
+  getAddedUsersIds,
+} from "./utils/db.js";
 
 export const commandActions = (message, args) => {
   const [nickname] = args;
+  const guildId = message.guild.id;
 
   return [
     {
       command: "show",
       action: async () => {
-        const playersIdList = await getAddedUsersIds();
+        const playersIdList = await getAddedUsersIds(guildId);
         const asyncRequests = playersIdList.map(fetchPlayerHistory);
         const histories = await Promise.all(asyncRequests);
 
         const match = getLatestCommonGame(histories);
         const matchData = await fetchMatchData(match.match_id);
-        const playersNicknamesList = await getAddedUsersNicknames();
+        const playersNicknamesList = await getAddedUsersNicknames(guildId);
         const teamScoreboard = getTeamScoreboard(matchData, playersNicknamesList);
         const bestPerformedPlayer = getBestPerformedPlayer(matchData, playersNicknamesList);
         const leastPerformedPlayer = getLeastPerformedPlayer(matchData, playersNicknamesList);
@@ -49,7 +55,7 @@ export const commandActions = (message, args) => {
           return;
         }
 
-        if (await duplicateCheck(nickname)) {
+        if (await duplicateCheck(nickname, guildId)) {
           await message.channel.send(`User ${nickname} is already added to the players list`);
           return;
         }
@@ -60,7 +66,7 @@ export const commandActions = (message, args) => {
           return;
         }
 
-        addUser(nickname, playerId);
+        addUser(nickname, playerId, guildId);
         await message.channel.send(`User ${nickname} added successfully`);
       },
     },
@@ -69,7 +75,7 @@ export const commandActions = (message, args) => {
       command: "remove",
       action: async () => {
         if (args.length === 1) {
-          removeUser(nickname);
+          removeUser(nickname, guildId);
           await message.channel.send(`User ${nickname} removed successfully`);
           return;
         }
@@ -79,8 +85,17 @@ export const commandActions = (message, args) => {
     {
       command: "list",
       action: async () => {
-        const addedPlayersList = await getAddedUsersNicknames();
+        const addedPlayersList = await getAddedUsersNicknames(guildId);
         await message.channel.send(`List of added users: ${addedPlayersList.join(", ")}`);
+      },
+    },
+
+    {
+      command: "help",
+      action: async () => {
+        await message.channel.send(
+          `\`!add [FaceIt nickname]\` - add a nickname to server's watchlist \n\`!remove [FaceIt nickname]\` - remove player from the watchlist\n\`!list\` - show the watchlist \n\`!show\` - show the latest game info and performance summary`
+        );
       },
     },
   ];
