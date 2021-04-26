@@ -15,4 +15,5 @@ faceitApi.interceptors.response.use(
 
 export const fetchMatchData = (matchId) => faceitApi.get(`matches/${matchId}/stats`);
 export const fetchPlayerData = (nickname) => faceitApi.get(`players?nickname=${nickname}`);
-export const fetchPlayerHistory = (playerId) => faceitApi.get(`players/${playerId}/history`);
+export const fetchPlayerHistory = (playerId) =>
+  faceitApi.get(`players/${playerId}/history?game=csgo`);

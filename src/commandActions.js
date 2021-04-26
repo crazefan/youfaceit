@@ -30,7 +30,7 @@ export const commandActions = (message, args) => {
         const histories = await Promise.all(asyncRequests);
 
         const match = getLatestCommonGame(histories);
-        const matchData = await fetchMatchData(match.match_id);
+        const matchData = await fetchMatchData(match);
         const playersNicknamesList = await getAddedUsersNicknames(guildId);
         const teamScoreboard = getTeamScoreboard(matchData, playersNicknamesList);
         const bestPerformedPlayer = getBestPerformedPlayer(matchData, playersNicknamesList);

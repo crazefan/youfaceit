@@ -17,19 +17,21 @@ export const getLatestCommonGame = (histories) => {
       game
         ? {
             ...result,
-            [game.match_id]: result[game.match_id] ? result[game.match_id] + 1 : 1,
+            [game.match_id]: {
+              commonGames: result[game.match_id] ? result[game.match_id].commonGames + 1 : 1,
+              timeFinished: game.finished_at,
+            },
           }
         : result,
     {}
   );
 
-  const gameId = Object.keys(gamesMap).reduce((result, matchId) =>
-    gamesMap[matchId] > gamesMap[result] ? matchId : result
-  );
+  // using gamesMap find a game with at least 2 players from server and then returning game id of the latest of them
+  const latestGameId = Object.keys(gamesMap)
+    .filter((game) => gamesMap[game].commonGames >= 2)
+    .reduce((acc, curr) => (acc > gamesMap[curr].timeFinished ? prev : curr), 0);
 
-  const latestGame = latestGames.find((game) => game.match_id === gameId);
-
-  return latestGame && gamesMap[gameId] >= 2 ? latestGame : null;
+  return latestGameId;
 };
 
 export const getRelevantPlayers = (matchData, playerIdList) => {
