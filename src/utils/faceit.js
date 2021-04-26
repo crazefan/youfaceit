@@ -29,8 +29,9 @@ export const getLatestCommonGame = (histories) => {
   // using gamesMap find a game with at least 2 players from server and then returning game id of the latest of them
   const latestGameId = Object.keys(gamesMap)
     .filter((game) => gamesMap[game].commonGames >= 2)
-    .reduce((acc, curr) => (acc > gamesMap[curr].timeFinished ? prev : curr), 0);
-
+    .reduce((latest, curr) =>
+      gamesMap[latest].timeFinished > parseInt(gamesMap[curr].timeFinished) ? latest : curr
+    );
   return latestGameId;
 };
 
