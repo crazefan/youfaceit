@@ -12,8 +12,8 @@ const formEmbeddedMessage = (messageData, messageThumbnail) => ({
   },
   fields: [
     {
-      name: `\n\nGame summary`,
-      value: `\n\n${messageData.body}`,
+      name: `Game summary\n\u200b`,
+      value: `${messageData.body}\n\u200b`,
     },
 
     {
@@ -37,15 +37,15 @@ export const composeMessage = (
   playerIdList
 ) => {
   const isVictory = hasWon(matchData, playerIdList)
-    ? "Finally a fucking **WIN**! Good job, team."
-    : "You **LOST** again. No wonder.";
+    ? ":trophy: Finally a **WIN**! Good job, team."
+    : ":cry: You **LOST** again. No wonder.";
 
   const messageThumbnail = hasWon(matchData, playerIdList)
     ? "https://i.imgur.com/jSq6lKO.jpg"
     : "https://i.imgur.com/1RpNBDa.jpg";
 
-  const bestPerfomer = `Best player - **${bestPerformedPlayer.nickname}**! Way to go!`;
-  const worstPerformer = `Hey, noob **${leastPerfomedPlayer.nickname}**. How about you start making some frags?`;
+  const bestPerformer = `:first_place: Best player - **${bestPerformedPlayer.nickname}**! Way to go!`;
+  const worstPerformer = `:clown: Hey, noob **${leastPerfomedPlayer.nickname}**. How about you start making some frags?`;
 
   const mapInfo = [
     `Map: ${matchData.rounds[0].round_stats.Map}`,
@@ -53,7 +53,7 @@ export const composeMessage = (
   ];
 
   const messageData = {
-    body: `${isVictory}\n\n${bestPerfomer}\n${worstPerformer}`,
+    body: `${isVictory}\n\n${bestPerformer}\n${worstPerformer}`,
     mapData: `${mapInfo.join("\n")}`,
     scoreboard: `${teamTable}`,
   };

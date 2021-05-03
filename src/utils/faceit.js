@@ -30,9 +30,9 @@ export const getLatestCommonGame = (histories) => {
   const latestGameId = Object.keys(gamesMap)
     .filter((game) => gamesMap[game].commonGames >= 2)
     .reduce((latest, curr) =>
-      gamesMap[latest].timeFinished > parseInt(gamesMap[curr].timeFinished) ? latest : curr
+      compareInts(gamesMap[latest].timeFinished, gamesMap[curr].timeFinished) ? latest : curr
     );
-  return latestGameId;
+  return latestGameId ? latestGameId : null;
 };
 
 export const getRelevantPlayers = (matchData, playerIdList) => {
