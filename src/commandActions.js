@@ -4,9 +4,10 @@ import {
   getLeastPerformedPlayer,
   getPlayerIdFromNickname,
   getLatestCommonGame,
+  hasWon,
 } from "./utils/faceit.js";
 
-import { composeMessage } from "./utils/message.js";
+import { composeMessage } from "./utils/message/message.js";
 import { fetchMatchData, fetchPlayerHistory } from "./api/index.js";
 
 import {
@@ -15,11 +16,14 @@ import {
   duplicateCheck,
   getAddedUsersNicknames,
   getAddedUsersIds,
+  getServerLanguage,
 } from "./utils/db.js";
 
-export const commandActions = (message, args) => {
+export const commandActions = async (message, args) => {
   const [nickname] = args;
   const guildId = message.guild.id;
+  const serverLanguage = await getServerLanguage(guildId);
+  console.log(serverLanguage);
 
   return [
     {
@@ -31,17 +35,19 @@ export const commandActions = (message, args) => {
 
         const match = getLatestCommonGame(histories);
         const matchData = await fetchMatchData(match);
+
         const playersNicknamesList = await getAddedUsersNicknames(guildId);
         const teamScoreboard = getTeamScoreboard(matchData, playersNicknamesList);
         const bestPerformedPlayer = getBestPerformedPlayer(matchData, playersNicknamesList);
         const leastPerformedPlayer = getLeastPerformedPlayer(matchData, playersNicknamesList);
+        const isWinner = hasWon(matchData, playersIdList);
 
         const embeddedMessage = composeMessage(
-          matchData,
+          isWinner,
           teamScoreboard,
           bestPerformedPlayer,
           leastPerformedPlayer,
-          playersNicknamesList
+          serverLanguage
         );
 
         await message.channel.send({ embed: embeddedMessage });
