@@ -7,8 +7,9 @@ import {
   hasWon,
 } from "./utils/faceit.js";
 
-import { composeMessage } from "./utils/message/message.js";
+import { composeMessage } from "./utils/message.js";
 import { fetchMatchData, fetchPlayerHistory } from "./api/index.js";
+import { multiLanguageCommandsText } from "./utils/multiLanguageText.js";
 
 import {
   addUser,
@@ -17,13 +18,15 @@ import {
   getAddedUsersNicknames,
   getAddedUsersIds,
   getServerLanguage,
+  setServerLanguage,
 } from "./utils/db.js";
 
 export const commandActions = async (message, args) => {
   const [nickname] = args;
   const guildId = message.guild.id;
   const serverLanguage = await getServerLanguage(guildId);
-  console.log(serverLanguage);
+  const text =
+    serverLanguage === "en" ? multiLanguageCommandsText().en : multiLanguageCommandsText().ru;
 
   return [
     {
@@ -43,6 +46,7 @@ export const commandActions = async (message, args) => {
         const isWinner = hasWon(matchData, playersIdList);
 
         const embeddedMessage = composeMessage(
+          matchData,
           isWinner,
           teamScoreboard,
           bestPerformedPlayer,
@@ -57,23 +61,23 @@ export const commandActions = async (message, args) => {
       command: "add",
       action: async () => {
         if (args.length !== 1) {
-          await message.channel.send("You cannot add multiple users or add an empty user.");
+          await message.channel.send(text.add.errorMultipleUsers);
           return;
         }
 
         if (await duplicateCheck(nickname, guildId)) {
-          await message.channel.send(`User ${nickname} is already added to the players list`);
+          await message.channel.send(text.add.errorExists);
           return;
         }
 
         const playerId = await getPlayerIdFromNickname(nickname);
         if (!playerId) {
-          await message.channel.send(`User ${nickname} was not found, try again.`);
+          await message.channel.send(text.add.errorNotFound);
           return;
         }
 
         addUser(nickname, playerId, guildId);
-        await message.channel.send(`User ${nickname} added successfully`);
+        await message.channel.send(text.add.success);
       },
     },
 
@@ -82,26 +86,38 @@ export const commandActions = async (message, args) => {
       action: async () => {
         if (args.length === 1) {
           removeUser(nickname, guildId);
-          await message.channel.send(`User ${nickname} removed successfully`);
+          await message.channel.send(text.remove.success);
           return;
         }
-        await message.channel.send("You cannot delete multiple users or remove an empty user.");
+        await message.channel.send(text.remove.errorMultiple);
       },
     },
     {
       command: "list",
       action: async () => {
         const addedPlayersList = await getAddedUsersNicknames(guildId);
-        await message.channel.send(`List of added users: ${addedPlayersList.join(", ")}`);
+        await message.channel.send(`${text.list} ${addedPlayersList.join(", ")}`);
       },
     },
 
     {
       command: "help",
       action: async () => {
-        await message.channel.send(
-          `\`!add [FaceIt nickname]\` - add a nickname to server's watchlist \n\`!remove [FaceIt nickname]\` - remove player from the watchlist\n\`!list\` - show the watchlist \n\`!show\` - show the latest game info and performance summary`
-        );
+        await message.channel.send(text.help);
+      },
+    },
+    {
+      command: "ru",
+      action: async () => {
+        await setServerLanguage(guildId, "ru");
+        await message.channel.send("Теперь язык бота - русский.");
+      },
+    },
+    {
+      command: "en",
+      action: async () => {
+        await setServerLanguage(guildId, "en");
+        await message.channel.send("Bot language is set to English.");
       },
     },
   ];

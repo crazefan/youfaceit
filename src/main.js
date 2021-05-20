@@ -6,7 +6,7 @@ import { handleError } from "./utils/handleError.js";
 import { commandActions } from "./commandActions.js";
 
 const bot = new Discord.Client();
-const prefix = "!yf-";
+const prefix = "!yf ";
 
 bot.once("ready", () => {
   console.log("YouFaceIt bot is online!");
