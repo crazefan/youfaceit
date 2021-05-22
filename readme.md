@@ -27,11 +27,11 @@ When your bot is up and running and is added to your Discord server, you can use
 - `!yf list` - show the watch list of added players
 - `!yf show` - detect latest common game of 2 and more players in the list and show info about the match
 - `!yf help` - show help and commands info
-- `!yf ru | en` - change bot's language to Russian | English, by default bot is in English
+- `!yf ru | en` - change bot's language to Russian | English, by default the bot is in English
 
 ### Testing and development 👨‍💻
 
-To run it in development mod you will need **Node.js** and **npm**.
+To run it in development mode you will need **Node.js** and **npm**.
 
 Clone the repository and run the following commands:
 

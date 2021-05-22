@@ -117,7 +117,7 @@ export const commandActions = async (message, args) => {
       command: "en",
       action: async () => {
         await setServerLanguage(guildId, "en");
-        await message.channel.send("Bot language is set to English.");
+        await message.channel.send("Bot's language is set to English.");
       },
     },
   ];

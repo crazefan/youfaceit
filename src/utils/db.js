@@ -70,8 +70,7 @@ export const addServerConfig = async (guildId, language) => {
 
 export const getServerLanguage = async (guildId) => {
   const server = await ServerConfig.findOne({ guildId: guildId });
-  console.log(server);
-  //if server config is not in db yet => add it to collection and set english as default
+  //if server config is not in db yet then add it to collection and set english as default
   if (!server) {
     await addServerConfig(guildId, "en");
     return "en";
