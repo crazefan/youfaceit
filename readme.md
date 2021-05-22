@@ -5,7 +5,7 @@ It allows players on a server to show their latest **FaceIt CS:GO** game info an
 
 _The idea was born on our Discord server, our team needed a way to automate the indication of who played worst and needed to improve their game (and call him a noob of course) and who played best in order to praise them for good job!_
 
-### Prerequisites
+### Prerequisites 🛠️
 
 To use it on your Discord server you need to have:
 
@@ -16,16 +16,18 @@ To use it on your Discord server you need to have:
 
 \*_Dont forget to whitelist your server ip in MongoDB Atlas connection settings_
 
-_The bot is in continuous development and is planned to be a public bot with easy access through adding to the server._
+_The bot is expected to be available for wide usage on Top.gg website right after the review._
 
-### Usage
+### Usage 👥
 
-When your bot is up and running and is on your server, you can use these commands:
+When your bot is up and running and is added to your Discord server, you can use the following commands:
 
-- `!add [FaceIt nickname]` - to add a player to a watch list
-- `!remove [FaceIt nickname]` - to remove a player from the list
-- `!list` - show the watch list of added players
-- `!show` - detect latest common game of 2 and more players in the list and show info about the match
+- `!yf add [FaceIt nickname]` - to add a player to a watch list
+- `!yf remove [FaceIt nickname]` - to remove a player from the list
+- `!yf list` - show the watch list of added players
+- `!yf show` - detect latest common game of 2 and more players in the list and show info about the match
+- `!yf help` - show help and commands info
+- `!yf ru | en` - change bot's language to Russian | English, by default bot is in English
 
 ### Testing and development 👨‍💻
 
