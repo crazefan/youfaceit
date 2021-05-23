@@ -37,6 +37,11 @@ export const commandActions = async (message, args) => {
         const histories = await Promise.all(asyncRequests);
 
         const match = getLatestCommonGame(histories);
+
+        if (!match) {
+          await message.channel.send(text.show.error);
+          return;
+        }
         const matchData = await fetchMatchData(match);
 
         const playersNicknamesList = await getAddedUsersNicknames(guildId);

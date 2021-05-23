@@ -49,6 +49,9 @@ export const multiLanguageEmbedText = () => ({
 
 export const multiLanguageCommandsText = () => ({
   en: {
+    show: {
+      error: "Players in the list don't have any common games yet.",
+    },
     add: {
       success: "User was added successfully.",
       errorExists: "User is already added to the players list.",
@@ -68,6 +71,9 @@ export const multiLanguageCommandsText = () => ({
     \n At least two valid FaceIt CS:GO players' nicknames should be added for bot to work correctly.`,
   },
   ru: {
+    show: {
+      error: "У добавленных пользователей нет общих игр.",
+    },
     add: {
       success: "Пользователь успешно добавлен.",
       errorExists: "Пользователь уже есть в списке.",

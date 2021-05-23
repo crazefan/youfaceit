@@ -26,13 +26,17 @@ export const getLatestCommonGame = (histories) => {
     {}
   );
 
-  // using gamesMap find a game with at least 2 players from server and then returning game id of the latest of them
-  const latestGameId = Object.keys(gamesMap)
-    .filter((game) => gamesMap[game].commonGames >= 2)
-    .reduce((latest, curr) =>
-      compareInts(gamesMap[latest].timeFinished, gamesMap[curr].timeFinished) ? latest : curr
-    );
-  return latestGameId ? latestGameId : null;
+  // using gamesMap filter games with at least 2 players from watchlist
+  const validLatestGames = Object.keys(gamesMap).filter((game) => gamesMap[game].commonGames >= 2);
+
+  // find game id that had been played most recently by comparing timeFinished parameter, if no games found with >2 players return null
+  const latestGameId = validLatestGames.length
+    ? validLatestGames.reduce((latest, curr) => {
+        compareInts(gamesMap[latest].timeFinished, gamesMap[curr].timeFinished) ? latest : curr;
+      })
+    : null;
+
+  return latestGameId;
 };
 
 export const getRelevantPlayers = (matchData, playerIdList) => {
