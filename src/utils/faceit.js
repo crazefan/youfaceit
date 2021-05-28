@@ -45,18 +45,16 @@ export const getRelevantPlayers = (matchData, playerIdList) => {
     .filter((player) => playerIdList.includes(player.nickname));
 };
 
-export const getTeamIndex = (matchData, playerIdList) => {
+export const getTeamIndex = (matchData, playersNicknamesList) => {
   return matchData.rounds[0].teams[0].players
     .map((player) => player.nickname)
-    .some((nick) => playerIdList.includes(nick))
+    .some((nick) => playersNicknamesList.includes(nick))
     ? 0
     : 1;
 };
 
-export const hasWon = (matchData, playerIdList) => {
-  return (
-    matchData.rounds[0].teams[getTeamIndex(matchData, playerIdList)].team_stats["Team Win"] === "1"
-  );
+export const hasWon = (matchData, teamIndex) => {
+  return matchData.rounds[0].teams[teamIndex].team_stats["Team Win"] === "1";
 };
 
 export const sortPlayersByKills = (player1, player2) => {
@@ -69,8 +67,8 @@ export const sortPlayersByKills = (player1, player2) => {
   return 0;
 };
 
-export const getTeamScoreboard = (matchData, playerIdList) => {
-  return matchData.rounds[0].teams[getTeamIndex(matchData, playerIdList)].players
+export const getTeamScoreboard = (matchData, teamIndex) => {
+  return matchData.rounds[0].teams[teamIndex].players
     .map(({ nickname, player_stats }) => ({
       nickname,
       kills: player_stats.Kills,

@@ -5,6 +5,7 @@ import {
   getPlayerIdFromNickname,
   getLatestCommonGame,
   hasWon,
+  getTeamIndex,
 } from "./utils/faceit.js";
 
 import { composeMessage } from "./utils/message.js";
@@ -45,11 +46,12 @@ export const commandActions = async (message, args) => {
         const matchData = await fetchMatchData(match);
 
         const playersNicknamesList = await getAddedUsersNicknames(guildId);
-        const teamScoreboard = getTeamScoreboard(matchData, playersNicknamesList);
+        const teamIndex = getTeamIndex(matchData, playersNicknamesList);
+
+        const teamScoreboard = getTeamScoreboard(matchData, teamIndex);
         const bestPerformedPlayer = getBestPerformedPlayer(matchData, playersNicknamesList);
         const leastPerformedPlayer = getLeastPerformedPlayer(matchData, playersNicknamesList);
-        const isWinner = hasWon(matchData, playersIdList);
-
+        const isWinner = hasWon(matchData, teamIndex);
         const embeddedMessage = composeMessage(
           matchData,
           isWinner,
