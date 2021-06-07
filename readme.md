@@ -5,18 +5,7 @@ It allows players on a server to show their latest **FaceIt CS:GO** game info an
 
 _The idea was born on our Discord server, our team needed a way to automate the indication of who played worst and needed to improve their game (and call him a noob of course) and who played best in order to praise them for good job!_
 
-### Prerequisites 🛠️
-
-To use it on your Discord server you need to have:
-
-- a valid [FaceIt API](https://developers.faceit.com/) key
-- Discord bot token from an [Discord developer portal](https://discord.com/developers/applications)
-- a way to deploy your server (I personally use [Heroku](https://heroku.com/))
-- [MongoDB](https://www.mongodb.com/) connection string for storing and managing your team info\*
-
-\*_Dont forget to whitelist your server ip in MongoDB Atlas connection settings_
-
-_The bot is expected to be available for wide usage on Top.gg website right after the review._
+You can add this bot to your server from [Top.gg page](https://top.gg/bot/760549048477286420)
 
 ### Usage 👥
 
@@ -31,7 +20,18 @@ When your bot is up and running and is added to your Discord server, you can use
 
 ### Testing and development 👨‍💻
 
-To run it in development mode you will need **Node.js** and **npm**.
+#### Prerequisites 🛠️
+
+Before running your local test version of this bot on your Discord server you need to have:
+
+- a valid [FaceIt API](https://developers.faceit.com/) key
+- Discord bot token from an [Discord developer portal](https://discord.com/developers/applications)
+- a way to deploy your server (I personally use [Heroku](https://heroku.com/))
+- [MongoDB](https://www.mongodb.com/) connection string for storing and managing your team info\*
+
+\*_Dont forget to whitelist your server ip in MongoDB Atlas connection settings_
+
+To run it in development mode you will also need **Node.js** and **npm**.
 
 Clone the repository and run the following commands:
 
