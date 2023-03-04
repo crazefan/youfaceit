@@ -40,7 +40,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ~/projects/youfaceit
-            git checkout .
-            git pull
+            git checkout master
+            git pull origin master
             npm install
             pm2 restart youfaceit --update-env
