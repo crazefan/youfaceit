@@ -1,0 +1,32 @@
+name: YouFaceIt CD
+
+on:
+  push:
+    branches-ignore:
+      - 'master'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+    strategy:
+      matrix:
+        node-version: [14.16.0]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: appleboy/ssh-action@master
+        env:
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd ~/projects/youfaceit
+            git checkout .
+            git pull
+            npm install
+            pm2 restart youfaceit --update-env
