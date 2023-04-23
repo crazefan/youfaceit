@@ -9,11 +9,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: dev
-
     strategy:
       matrix:
         node-version: [14.16.0]
-
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
