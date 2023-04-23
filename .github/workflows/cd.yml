@@ -1,4 +1,3 @@
-# prettier-ignore
 name: YouFaceIt CD
 
 on:
@@ -27,7 +26,7 @@ jobs:
           host: ${{ secrets.HOSTNAME }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          script: 
+          script: |
             cd ~/projects/youfaceit
             git checkout .
             git pull
